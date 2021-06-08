@@ -1,5 +1,5 @@
 // Imports
-import React, { useEffect, useState } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import jwt_decode from 'jwt-decode';
 import setAuthToken from './utils/setAuthToken';
@@ -13,6 +13,22 @@ import Profile from './components/Profile';
 import Signup from './components/Signup';
 import Login from './components/Login';
 import About from './components/About';
+
+//Private route component
+// private route for  <PrivateRoute path='/profile' component={ Profile} user={currentUser} handleLogout={handleLogout} />
+const PrivateRoute = ({ component: Component, ...rest }) => {
+  console.log('This is a private route...')
+  //grab the token
+  let user = localStorage.getItem('jwtToken');
+  
+   //to check to see if ther is a user inside the loalStorage
+//     // {...rest} = for any information that ccomes in
+  return <Route {...rest} render={ (props) => {
+      return user ? <Component {...rest} {...props} /> : <Redirect to='/login' />
+  }}/>
+}
+
+
 
 function App() {
   // Set state values
@@ -55,7 +71,21 @@ function App() {
 
   return (
     <div className="App">
-      {/* <Navbar  /> */}
+      {/* isAuth is located on the Navbar.js at the components */}
+      <Navbar  isAuth={isAuthenticated} handleLogout={handleLogout} />
+      <div className="container mt-5" >
+        <Switch>
+          {/* routes will go inside of here */}
+          <Route path='/signup' component={ Signup } />
+          {/* if props is used we have to use the render methode */}
+          <Route path='/login' render={(props) => <Login {...props} nowCurrentUser={nowCurrentUser} setIsAuthenticated={setIsAuthenticated} />} />
+          {/* now the path for About route */}
+          <Route  path='/about' component={ About} />
+          <Route exact path='/' component={ Welcome } />
+          <PrivateRoute path='/profile' component={ Profile} user={currentUser} handleLogout={handleLogout} />
+        </Switch>
+
+      </div>
       
       <Footer />
     </div>
