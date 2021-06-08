@@ -89,7 +89,7 @@ const Signup = () => {
             <div className="col-md-7 offset-md-3">
                 <div className="card card-body">
                     <h2 className="py-2">Signup</h2>
-                    <Form onSubmit={handleSubmit}>
+                    <form onSubmit={handleSubmit}>
 
                         <div className="form-group">
                             <lable htmlFor="name">Name</lable>
@@ -116,7 +116,7 @@ const Signup = () => {
                         <button type="submit" className="btn btn-primary float-right">Submit</button>
 
 
-                    </Form>
+                    </form>
 
                 </div>
             </div>
